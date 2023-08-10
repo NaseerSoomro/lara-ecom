@@ -8,7 +8,7 @@
                     <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Category</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form wire:submit.prevent="deleteCategory">
+                <form wire:submit.prevent="destroyCategory">
                     @csrf
                     <div class="modal-body">
                         <h3 class="text-danger">Are you sure you want to delete?</h3>
@@ -28,13 +28,18 @@
             @endif
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('category.create') }}" class="btn btn-primary text-white float-right">Add Category</a>
+                    <a href="{{ route('category.create') }}" class="btn btn-primary text-white float-end"> <i
+                            class="mdi mdi-clipboard-plus menu-icon mt-2 font-small"></i>
+                        Add Category</a>
+                    {{-- <i class="fas fa-heart"></i> --}}
+
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                                <th>ID </th>
                                 <th>Name</th>
                                 <th>Status</th>
                                 <th>Actions</th>

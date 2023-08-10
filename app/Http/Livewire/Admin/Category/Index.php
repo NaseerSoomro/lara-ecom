@@ -19,7 +19,6 @@ class Index extends Component
 
     public function deleteCategory($category_id)
     {
-        dd($category_id);
         $this->category_id = $category_id;
     }
 
