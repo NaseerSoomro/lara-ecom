@@ -69,8 +69,6 @@
                     <div>
                         {{ $categories->links() }}
                     </div>
-                    {{-- Alternative way to render pagination with Bootstrap 4 styling --}}
-                    {{-- {{  $categories->links('pagination::bootstrap-4') }} --}}
                 </div>
             </div>
         </div>

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ColorController;
 
 Route::get('/', function(){
     return view('welcome');
@@ -33,10 +34,28 @@ Route::prefix('admin/')->middleware(['auth', 'is_admin'])->group(function(){
         Route::get('products', 'index')->name('products.index');  
         Route::get('products/create', 'create')->name('products.create');  
         Route::post('products', 'store')->name('products.store');  
-        Route::get('products/{id}/edit', 'edit')->name('products.edit');  
+        Route::get('products/{product}/edit', 'edit')->name('products.edit');  
         Route::post('products/{id}/update', 'update')->name('products.update');  
-        Route::get('products/{id}/view', 'show')->name('products.show');  
-        Route::post('products/{id}/delete', 'destroy')->name('products.delete');  
+        Route::get('products/{id}/show', 'show')->name('products.show');  
+        Route::get('products/{id}/delete', 'destroy')->name('products.delete');  
+        Route::get('products/delete-product-image/{id}', 'destroy_image')->name('products.image.delete');  
+        
+        // 
+        Route::post('products/update-color-products/{color_product_id}', 'update_color_products_quantity');  
+        Route::get('products/delete-color-products/{color_product_id}', 'delete_color_products_quantity');  
     });
+
+     // Brand Routes
+     Route::controller(ColorController::class)->group(function(){
+        Route::get('colors', 'index')->name('colors.index');  
+        Route::get('colors/create', 'create')->name('colors.create');  
+        Route::post('colors', 'store')->name('colors.store');  
+        Route::get('colors/{id}/edit', 'edit')->name('colors.edit');  
+        Route::post('colors/{id}/update', 'update')->name('colors.update');  
+        Route::get('colors/{id}/show', 'show')->name('colors.show');  
+        Route::get('colors/{id}/delete', 'destroy')->name('colors.delete');  
+        Route::delete('colors/product-image/{id}/delete', 'destroy_image')->name('colors.image.delete');  
+    });
+
 
 });

@@ -24,19 +24,20 @@ class ProductFormRequest extends FormRequest
         return [
             'category_id'       => 'required|integer',
             'name'              => 'required|string',
-            'slug'              => 'required|string|max:255',
+            'slug'              => 'required|string',
             'brand'             => 'required|string',
             'small_description' => 'required|string',
             'description'       => 'required|string',
             'original_price'    => 'required|integer',
             'selling_price'     => 'required|integer',
-            'quantity'          => 'nullable',
-            'trending'          => 'nullable',
-            'status'            => 'required|integer',
+            'quantity'          => 'nullable|integer', // Specify that quantity should be an integer
+            'trending'          => 'nullable|boolean', // Use boolean validation rule for true/false values
+            'status'            => 'nullable|boolean', // Use boolean validation rule for true/false values
             'meta_title'        => 'required|string',
             'meta_keyword'      => 'required|string',
             'meta_description'  => 'required|string',
-            'image'             => 'nullable|image|mimes:jpeg,png,jpg',
+            
+            // 'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // Adjust the 'max' value as needed
         ];
     }
 }

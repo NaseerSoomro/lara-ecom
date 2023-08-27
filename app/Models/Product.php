@@ -18,6 +18,7 @@ class Product extends Model
         'description',
         'original_price',
         'selling_price',
+        'quantity',
         'trending',
         'status',
         'meta_title',
@@ -25,8 +26,25 @@ class Product extends Model
         'meta_description',
     ];
 
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
     public function productImages()
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
+
+    // Color belongs to which product
+    public function colorProducts()
+    {
+        return $this->hasMany(ColorProduct::class, 'product_id', 'id');
+    }
+
+    // A Product has many colors
+    // public function colors()
+    // {
+    //     return $this->hasMany(Product::class, 'product_id', 'id');
+    // }
 }

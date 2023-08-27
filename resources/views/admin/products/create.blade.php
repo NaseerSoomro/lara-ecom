@@ -7,6 +7,20 @@
                 <div class="card-header">
                     <a href="{{ route('products.index') }}" class="btn btn-primary text-white float-right"> Back </a>
                 </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                @if (session()->has('success'))
+                    <h3 class="alert alert-success"> {{ session('success') }} </h3>
+                @elseif (session()->has('error'))
+                    <h3 class="alert alert-danger"> {{ session('error') }} </h3>
+                @endif
                 <form action="{{ route('products.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
@@ -27,17 +41,27 @@
                                     aria-selected="false">Details</button>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="image-tab" data-bs-toggle="pill" data-bs-target="#image"
-                                    type="button" role="tab" aria-controls="image"
-                                    aria-selected="false">Image(s)</button>
+                                <button class="nav-link" id="image-tab" onclick="displayInsertButton()"
+                                    data-bs-toggle="pill" data-bs-target="#image" type="button" role="tab"
+                                    aria-controls="image" aria-selected="false">
+                                    Image(s)
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="color-tab" onclick="displayInsertButtons()"
+                                    data-bs-toggle="pill" data-bs-target="#color" type="button" srole="tab"
+                                    aria-controls="color" aria-selected="false">
+                                    Color(s)
+                                </button>
                             </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-home" role="tabpanel"
                                 aria-labelledby="pills-home-tab">
                                 <div class="mb-3">
-                                    <label for=""> Category </label>
-                                    <select name="category_id" id="">
+                                    <label for="category_id"> Category </label>
+                                    <select name="category_id" id="category_id" class="form-control rounded">
+                                        <option value=""> --Select-- </option>
                                         @foreach ($categories as $category)
                                             <option value="{{ $category->id }}"> {{ $category->name }} </option>
                                         @endforeach
@@ -51,24 +75,25 @@
                                         @enderror </span>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="name"> Slug </label>
-                                    <input type="text" name="name" id="name" class="form-control rounded">
-                                    <span class="text-danger"> @error('name')
+                                    <label for="slug"> Slug </label>
+                                    <input type="text" name="slug" id="slug" class="form-control rounded">
+                                    <span class="text-danger"> @error('slug')
                                             {{ $message }}
                                         @enderror </span>
                                 </div>
                                 <div class="mb-3">
                                     <label for=""> Brand </label>
-                                    <select name="brand" id="">
+                                    <select name="brand" id="brand" class="form-control rounded">
+                                        <option value=""> --Select-- </option>
                                         @foreach ($brands as $brand)
                                             <option value="{{ $brand->name }}"> {{ $brand->name }} </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3">
-                                    <label for="description"> Small Description </label>
+                                    <label for="small_description"> Small Description </label>
                                     <textarea name="small_description" id="description" class="form-control rounded" rows="3"></textarea>
-                                    <span class="text-danger"> @error('description')
+                                    <span class="text-danger"> @error('small_description')
                                             {{ $message }}
                                         @enderror </span>
                                 </div>
@@ -131,25 +156,44 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="trending"> Trending </label>
-                                    <input type="checkbox" name="trending" id="status">
+                                    <input type="checkbox" name="trending" id="status" value="1">
                                 </div>
                                 <div class="mb-3">
                                     <label for="status"> Status </label>
-                                    <input type="checkbox" name="status" id="status">
+                                    <input type="checkbox" name="status" id="status" value="1">
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
                                 <div class="mb-3">
                                     <label for="images"> Upload Product Image(s) </label>
-                                    <input type="file" name="image[]" id="image" class="form-control rounded" multiple>
+                                    <input type="file" name="image[]" id="image" class="form-control rounded"
+                                        multiple>
                                     <span class="text-danger"> @error('image')
                                             {{ $message }}
                                         @enderror </span>
                                 </div>
                             </div>
+                            <div class="tab-pane fade" id="color" role="tabpanel" aria-labelledby="color-tab">
+                                <div class="mb-3">
+                                    <label for="colors"> Select Color(s) </label>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            @forelse ($colors as $color)
+                                                <div class="d-flex">
+                                                    <input type="checkbox" name="color[]" id="color"
+                                                        value="{{ $color->id }}"> {{ $color->name }}
+                                                    <input type="number" name="color_quantity[]" id="color_quantity">
+                                                </div>
+                                            @empty
+                                                No Color(s) Available
+                                            @endforelse
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-md-5"></div>
                             <div class="col-md-5">
-                                <input type="submit" value="Insert" class="btn btn-primary text-white">
+                                <input type="submit" value="Insert" id="insertbtn" class="btn btn-primary text-white">
                             </div>
                             <div class="col-md-1"></div>
                         </div>
@@ -158,4 +202,9 @@
             </div>
         </div>
     </div>
+    <script>
+        function displayInsertButton() {
+            var insertBtn = document.getElementById('insertbtn').style.display = 'block';
+        }
+    </script>
 @endsection

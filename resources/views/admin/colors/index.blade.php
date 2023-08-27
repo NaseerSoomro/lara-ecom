@@ -5,17 +5,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
-                    <a href="{{ route('products.create') }}" class="btn btn-primary text-white float-end"> Add Product </a>
+                    <a href="{{ route('colors.create') }}" class="btn btn-primary text-white float-end"> Add Product Color
+                    </a>
                 </div>
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 @if (session()->has('success'))
                     <h3 class="alert alert-success"> {{ session('success') }} </h3>
                 @elseif (session()->has('error'))
@@ -28,37 +20,38 @@
                                 <i class="fa fa-arrow-left" aria-hidden="true"></i>
                                 <th>ID </th>
                                 <th>Name</th>
-                                <th>Slug</th>
-                                <th>Brand</th>
-                                <th>Category</th>
+                                <th>Color Code</th>
+                                <th>Product</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($products as $product)
+                            @forelse ($colors as $color)
                                 <tr>
-                                    <td>{{ $product->id }}</td>
-                                    <td>{{ $product->name }}</td>
-                                    <td>{{ $product->slug }}</td>
-                                    <td>{{ $product->brand }}</td>
-                                    <td>{{ $product->category->name }}</td>
+                                    <td>{{ $color->id }}</td>
+                                    <td>{{ $color->name }}</td>
+                                    <td>{{ $color->color_code }}</td>
+                                    {{-- @if ($color->products)
+                                        <td>{{ $color->products->name }}</td>
+                                    @else --}}
+                                        <td>--</td>
+                                    {{-- @endif --}}
                                     <td>
-                                        @if ($product->status === 1)
+                                        @if ($color->status === 1)
                                             <input type="checkbox" name="status" id="status"
-                                                {{ $product->status == 1 ? 'checked' : '' }} onclick="getStatus()">
+                                                {{ $color->status == 1 ? 'checked' : '' }} onclick="getStatus()">
                                         @else
-                                            <input type="checkbox" name="status" id="status"
-                                                onclick="getStatus()">
+                                            <input type="checkbox" name="status" id="status" onclick="getStatus()">
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ url('admin/products/' . $product->id . '/show') }}"
+                                        <a href="{{ url('admin/colors/' . $color->id . '/show') }}"
                                             class="btn btn-primary btn-sm text-white">View</a>
-                                        <a href="{{ url('admin/products/' . $product->id. '/edit') }}"
+                                        <a href="{{ url('admin/colors/' . $color->id . '/edit') }}"
                                             class="btn btn-success btn-sm text-white">Edit</a>
-                                        <a href="{{ url('admin/products/' . $product->id . '/delete') }}"
-                                            class="btn btn-danger btn-sm text-white">Delete</a>
+                                        <a href="{{ url('admin/colors/' . $color->id . '/delete') }}"
+                                            class="btn btn-danger btn-sm text-white" onclick="return confirm('Are you sure?')">Delete</a>
                                     </td>
                                 </tr>
                             @empty
@@ -69,7 +62,7 @@
                         </tbody>
                     </table>
                     <div>
-                        {{ $products->links() }}
+                        {{-- {{ $colors->links() }} --}}
                     </div>
                 </div>
             </div>
