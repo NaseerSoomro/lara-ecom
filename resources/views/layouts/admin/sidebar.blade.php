@@ -45,7 +45,7 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ url('admin/slider') }}">
+        <a class="nav-link" href="{{ route('sliders.index') }}">
           <i class="mdi mdi-view-headline menu-icon"></i>
           <span class="menu-title">Home Slider</span>
         </a>

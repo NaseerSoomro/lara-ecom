@@ -62,7 +62,7 @@
                         </tbody>
                     </table>
                     <div>
-                        {{-- {{ $colors->links() }} --}}
+                        {{ $colors->links() }}
                     </div>
                 </div>
             </div>

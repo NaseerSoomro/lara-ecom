@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ColorController;
+use App\Http\Controllers\Admin\SliderController;
 
 Route::get('/', function(){
     return view('welcome');
@@ -55,6 +56,18 @@ Route::prefix('admin/')->middleware(['auth', 'is_admin'])->group(function(){
         Route::get('colors/{id}/show', 'show')->name('colors.show');  
         Route::get('colors/{id}/delete', 'destroy')->name('colors.delete');  
         Route::delete('colors/product-image/{id}/delete', 'destroy_image')->name('colors.image.delete');  
+    });
+
+     // Slider Routes
+     Route::controller(SliderController::class)->group(function(){
+        Route::get('sliders', 'index')->name('sliders.index');  
+        Route::get('colors/create', 'create')->name('sliders.create');  
+        Route::post('sliders', 'store')->name('sliders.store');  
+        Route::get('sliders/{id}/edit', 'edit')->name('sliders.edit');  
+        Route::post('sliders/{id}/update', 'update')->name('sliders.update');  
+        Route::get('sliders/{id}/show', 'show')->name('sliders.show');  
+        Route::get('sliders/{id}/delete', 'destroy')->name('sliders.delete');  
+        Route::delete('sliders/product-image/{id}/delete', 'destroy_image')->name('sliders.image.delete');  
     });
 
 
