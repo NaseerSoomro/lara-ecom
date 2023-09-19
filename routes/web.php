@@ -9,12 +9,14 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Frontend\FrontendController;
 
-Route::get('/', function(){
-    return view('welcome');
-});
 
 Auth::routes();
+
+Route::get('/', [FrontendController::class, 'index']);
+Route::get('/collections', [FrontendController::class, 'categories']);
+Route::get('/collections/{slug}', [FrontendController::class, 'category_products']);
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -28,7 +30,7 @@ Route::prefix('admin/')->middleware(['auth', 'is_admin'])->group(function(){
     // Route::resource('brands', BrandController::class);
 
     // Brand Component using Livewire
-    Route::get('/add-brand', App\Http\Livewire\Admin\Brand\Index::class);
+    Route::get('/brands', App\Http\Livewire\Admin\Brand\Index::class)->name('brands');
 
     // Brand Routes
     Route::controller(ProductController::class)->group(function(){
@@ -46,7 +48,7 @@ Route::prefix('admin/')->middleware(['auth', 'is_admin'])->group(function(){
         Route::get('products/delete-color-products/{color_product_id}', 'delete_color_products_quantity');  
     });
 
-     // Brand Routes
+     // Color Routes
      Route::controller(ColorController::class)->group(function(){
         Route::get('colors', 'index')->name('colors.index');  
         Route::get('colors/create', 'create')->name('colors.create');  
@@ -61,7 +63,7 @@ Route::prefix('admin/')->middleware(['auth', 'is_admin'])->group(function(){
      // Slider Routes
      Route::controller(SliderController::class)->group(function(){
         Route::get('sliders', 'index')->name('sliders.index');  
-        Route::get('colors/create', 'create')->name('sliders.create');  
+        Route::get('sliders/create', 'create')->name('sliders.create');  
         Route::post('sliders', 'store')->name('sliders.store');  
         Route::get('sliders/{id}/edit', 'edit')->name('sliders.edit');  
         Route::post('sliders/{id}/update', 'update')->name('sliders.update');  

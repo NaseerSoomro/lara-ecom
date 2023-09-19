@@ -1,7 +1,8 @@
 @extends('layouts.admin')
 
-@section('content')
+@section('title', 'Create Category')
 
+@section('content')
 <div class="row">
     <div class="col-md-12">
         <div class="card">

@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'category_id',
@@ -31,15 +34,21 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
+    // Product Belongs to which Brand
+    // public function brand()
+    // {
+    //     return $this->belongsTo(Brand::class);
+    // }
+
     public function productImages()
     {
         return $this->hasMany(ProductImage::class, 'product_id', 'id');
     }
 
     // Color belongs to which product
-    public function colorProducts()
+    public function colors()
     {
-        return $this->hasMany(ColorProduct::class, 'product_id', 'id');
+        return $this->belongsToMany(Color::class, 'color_products', 'product_id', 'color_id')->withPivot('id', 'color_quantity');
     }
 
     // A Product has many colors

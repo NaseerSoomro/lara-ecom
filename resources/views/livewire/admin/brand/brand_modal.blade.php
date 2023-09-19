@@ -4,12 +4,21 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Insert Brand</h1>
+                <h1 class="modal-title fs-5" id="insertBrandModal">Insert Brand</h1>
                 <button type="button" wire:click="closeModal" class="btn-close" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <form wire:submit.prevent="storeBrand">
                 <div class="modal-body">
+                    <div class="col-md-12 mb-2">
+                        <label for="category"> Category </label>
+                        <select name="category_id" id="category_id" class="form-select" wire:model.defer="category_id">
+                            <option value="">--Select--</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="col-md-12 mb-3">
                         <label for="name"> Name </label>
                         <input type="text" wire:model.defer="name" class="form-control rounded bordered" />
@@ -26,13 +35,14 @@
                     </div>
                     <div class="col-md-12 mb-3 text-center">
                         <label for="statuss"> Status </label>
-                        <input type="checkbox" wire:model.defer="status" />
+                        <input type="checkbox" wire:model="status" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" wire:click="closeModal" class="btn btn-secondary"
                             data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary text-white">Insert</button>
                     </div>
+                </div>
             </form>
         </div>
     </div>
@@ -44,7 +54,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Insert Brand</h1>
+                <h1 class="modal-title fs-5" id="updateBrandModal">Insert Brand</h1>
                 <button type="button" wire:click="closeModal" class="btn-close" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -57,6 +67,16 @@
             <div wire:loading.remove>
                 <form wire:submit.prevent="updateBrand">
                     <div class="modal-body">
+                        <div class="col-md-12 mb-2">
+                            <label for="category"> Category </label>
+                            <select name="category_id" id="category_id" class="form-select"
+                                wire:model.defer="category_id">
+                                <option value="">--Select--</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-md-12 mb-3">
                             <label for="name"> Name </label>
                             <input type="text" wire:model.defer="name" class="form-control rounded bordered" />
@@ -80,18 +100,20 @@
                                 data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary text-white">Insert</button>
                         </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <!-- View Brand Modal -->
 <div wire:ignore.self class="modal fade" id="showBrandModal" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Insert Brand</h1>
+                <h1 class="modal-title fs-5" id="showBrandModal">Insert Brand</h1>
                 <button type="button" wire:click="closeModal" class="btn-close" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -104,29 +126,42 @@
             <div wire:loading.remove>
                 <form wire:submit.prevent="updateBrand">
                     <div class="modal-body">
+                        <div class="col-md-12 mb-2">
+                            <label for="category"> Category </label>
+                            <select name="category_id" id="category_id" class="form-select"
+                                wire:model.defer="category_id">
+                                <option value="">--Select--</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-md-12 mb-3">
                             <label for="name"> Name </label>
-                            <input type="text" wire:model.defer="name" class="form-control rounded bordered" readonly/>
+                            <input type="text" wire:model.defer="name" class="form-control rounded bordered"
+                                readonly />
                             <span class="text-danger"> @error('name')
                                     {{ $message }}
                                 @enderror </span>
                         </div>
                         <div class="col-md-12 mb-3">
                             <label for="slug"> Slug </label>
-                            <input type="text" wire:model.defer="slug" class="form-control rounded bordered" readonly />
+                            <input type="text" wire:model.defer="slug" class="form-control rounded bordered"
+                                readonly />
                             <span class="text-danger"> @error('slug')
                                     {{ $message }}
                                 @enderror </span>
                         </div>
                         <div class="col-md-12 mb-3 text-center">
                             <label for="statuss"> Status </label>
-                            <input type="checkbox" wire:model.defer="status" readonly/>
+                            <input type="checkbox" wire:model.defer="status" readonly />
                         </div>
                         <div class="modal-footer">
                             <button type="button" wire:click="closeModal" class="btn btn-secondary"
                                 data-bs-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary text-white">Insert</button>
                         </div>
+                    </div>
                 </form>
             </div>
         </div>
@@ -139,7 +174,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteModalLabel">Delete Brand</h1>
+                <h1 class="modal-title fs-5" id="deleteBrandModal">Delete Brand</h1>
                 <button type="button" class="btn-close" wire:click="closeModal" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>

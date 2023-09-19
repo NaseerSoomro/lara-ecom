@@ -51,7 +51,7 @@ class CategoryController extends Controller
             $file->move('uploads/category/', $filename);
 
             // Uploading Image path in Database
-            $category->image = $filename;
+            $category->image = 'uploads/category/'.$filename;
         }
 
         $category->meta_title = $validated_data['meta_title'];
@@ -113,7 +113,7 @@ class CategoryController extends Controller
             $file->move('uploads/category/', $filename);
 
             // Uploading Image path in Database
-            $category->image = $filename;
+            $category->image = 'uploads/category/'.$filename;
         }
 
         $category->meta_title = $validated_data['meta_title'];
@@ -136,7 +136,7 @@ class CategoryController extends Controller
 
     public function destroy(Category $category)
     {
-
+        dd($category);
     }
 
 }

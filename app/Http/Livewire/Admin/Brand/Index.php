@@ -3,6 +3,7 @@
 namespace App\Http\Livewire\Admin\Brand;
 
 use App\Models\Brand;
+use App\Models\Category;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
@@ -12,11 +13,13 @@ class Index extends Component
     use WithPagination;
     protected $paginationTheme = 'bootstrap';
 
-    public $name, $slug, $status, $brand_id;
-
+    public $category_id, $name, $slug, $status, $brand_id, $message = '';
+    protected $listeners = ['hideMessage'];
+    
     public function rules()
     {
         return [
+            'category_id' => 'required|integer',
             'name' => 'required|string',
             'slug' => 'required|string',
             'status' => 'nullable',
@@ -25,6 +28,7 @@ class Index extends Component
 
     private function resetInputFields()
     {
+        $this->category_id = '';
         $this->name = '';
         $this->slug = '';
         $this->status = '';
@@ -32,19 +36,19 @@ class Index extends Component
 
     public function storeBrand()
     {
-        $validatedData = $this->validate();
-
         Brand::create([
-            'name' => $this->name,
-            'slug' => Str::slug($this->slug),
-            'status' => $this->status == true ? '1' : '0',
+            'category_id'   => $this->category_id,
+            'name'          => $this->name,
+            'slug'          => Str::slug($this->slug),
+            'status'        => $this->status == true ? '1' : '0',
         ]);
 
-        session()->flash('message', 'Brand Inserted Successfully');
+        $this->message = 'Brand Inserted Successfully';
+        $this->dispatchBrowserEvent('hideMessage', ['delay' => 5000]);
         $this->dispatchBrowserEvent('close-modal');
         $this->resetInputFields();
     }
-    
+
     public function openModal()
     {
         $this->resetInputFields();
@@ -61,6 +65,7 @@ class Index extends Component
 
         $brand = Brand::findOrFail($brand_id);
 
+        $this->category_id     = $brand->category_id;
         $this->name     = $brand->name;
         $this->slug     = $brand->slug;
         $this->status   = $brand->status;
@@ -71,6 +76,7 @@ class Index extends Component
         $validatedData = $this->validate();
 
         Brand::findOrFail($this->brand_id)->update([
+            'category_id' => $this->category_id,
             'name' => $this->name,
             'slug' => Str::slug($this->slug),
             'status' => $this->status == true ? '1' : '0',
@@ -85,6 +91,7 @@ class Index extends Component
     {
         $brand = Brand::findOrFail($brand_id);
 
+        $this->category_id     = $brand->category_id;
         $this->name     = $brand->name;
         $this->slug     = $brand->slug;
         $this->status   = $brand->status;
@@ -105,7 +112,13 @@ class Index extends Component
 
     public function render()
     {
-        $brands = Brand::orderBy('id','Desc')->paginate(2);
-        return view('livewire.admin.brand.index', ['brands' => $brands])->extends('layouts.admin')->section('content');
+        $brands = Brand::orderBy('id', 'Desc')->paginate(2);
+        $categories = Category::where('status', '1')->get();
+        return view('livewire.admin.brand.index', ['brands' => $brands, 'categories' => $categories])->extends('layouts.admin')->section('content');
+    }
+
+    public function hideMessage()
+    {
+        $this->message = '';
     }
 }

@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SliderFormRequest;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\File;
+
 use App\Models\Slider;
 
 class SliderController extends Controller
@@ -39,15 +41,15 @@ class SliderController extends Controller
             'description' => $validatedData['description'],
             'status' => $request->status == true ? '1' : '0',
         ]);
-        if($request->hasFile('image')){
+        if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
-            $filename = time().'.'.$extension;
+            $filename = time() . '.' . $extension;
             $file->move('uploads/sliders', $filename);
-            $slider->image = 'uploads/sliders/'.$filename;
+            $slider->image = 'uploads/sliders/' . $filename;
         }
 
-        if($slider->save()){
+        if ($slider->save()) {
             return redirect('admin/sliders')->with('success', 'Slider with Image Created Successfully');
         }
         return redirect('admin/sliders')->with('error', 'Something went wrong');
@@ -66,22 +68,68 @@ class SliderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $slider = Slider::find($id);
+        return view('admin.sliders.edit', compact('slider'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(SliderFormRequest $request, $id)
     {
-        //
+        $slider = Slider::find($id);
+        // dd($slider);
+        $validatedData = $request->validated();
+
+        // Update the slider attributes
+        $slider->title = $validatedData['title'];
+        $slider->description = $validatedData['description'];
+        $slider->status = $request->status == true ? '1' : '0';
+
+        if ($request->hasFile('image')) {
+            // Delete the old image file if it exists
+            if (File::exists($slider->image)) {
+                File::delete($slider->image);
+            }
+
+            $file = $request->file('image');
+            $extension = $file->getClientOriginalExtension();
+            $filename = time() . '.' . $extension;
+            $file->move('uploads/sliders', $filename);
+
+            // Update the image attribute
+            $slider->image = 'uploads/sliders/' . $filename;
+        }
+
+        // Save the updated slider
+        if ($slider->save()) {
+            return redirect('admin/sliders')->with('success', 'Slider with Image Updated Successfully');
+        }
+
+        return redirect('admin/sliders')->with('error', 'Something went wrong');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        $slider = Slider::find($id);
+
+    if ($slider) { // Check if $slider is not null
+        if (File::exists($slider->image)) {
+            File::delete($slider->image);
+        }
+        
+        if ($slider->delete()) {
+            return redirect('admin/sliders')->with('success', 'Slider with Image Deleted Successfully');
+        }
+
+        return redirect('admin/sliders')->with('error', 'Something went wrong');
+    }
+
+    // Handle the case when the slider with the given $id doesn't exist
+    return redirect('admin/sliders')->with('error', 'Slider not found');
+
     }
 }

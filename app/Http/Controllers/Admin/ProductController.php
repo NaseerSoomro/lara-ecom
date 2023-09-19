@@ -35,8 +35,6 @@ class ProductController extends Controller
 
     public function store(ProductFormRequest $request)
     {
-        // dd($request->all());
-        $validatedData = $request->validated();
         // dd($validatedData['category_id']);
         // Way 1
         // $product = new Product;
@@ -78,6 +76,8 @@ class ProductController extends Controller
         // }
         // return redirect()->back()->with('error', 'Product did not created');
 
+        // dd($request->all());
+        $validatedData = $request->validated();
         $category_id = Category::findOrFail($validatedData['category_id']);
         // dd($category_id);
         // Way 2
@@ -113,16 +113,41 @@ class ProductController extends Controller
             }
         }
 
-        if ($request->color) {
-            foreach ($request->color as $key => $color) {
-                $product->colorProducts()->create([
-                    'product_id'    => $product->id,
-                    'color_id'    => $color->id,
-                    'color_quantity'    => $request->color_quantity[$key],
+        // if ($request->color) {
+        //     foreach ($request->color as $key => $color) {
+        //         $product->colors()->create([
+        //             'product_id'        => $product->id,
+        //             'color_id'          => $color->id,
+        //             'color_quantity'    => $request->color_quantity[$key],
+        //         ]);
+        //     }
+        // }
+        // if (is_array($request->color)) {
+        //     foreach ($request->color as $key => $colorId) {
+        //         // dd($request->color_quantity[$key]);
+        //         $qty = intval($colorId - 1);
+        //         $color_id = intval($colorId);
+        //         // dd($color_id);
+        //         // dd($qty);
+        //         $product->colors()->attach([
+        //             'product_id' => $product->id,
+        //             'color_id' => $color_id,
+        //             'color_quantity' => $request->color_quantity[$qty],
+        //         ]);
+        if (is_array($request->color)) {
+            foreach ($request->color as $key => $colorId) {
+                $qty = intval($colorId - 1);
+                $color_id = intval($colorId);
+
+                $product->colors()->attach($color_id, [
+                    'product_id' => $product->id,
+                    'color_quantity' => $request->color_quantity[$qty],
                 ]);
             }
         }
-        return redirect()->back()->with('success', 'Product with Images created successfully');
+        // }
+        // }
+        return redirect()->route('products.index')->with('success', 'Product with Images created successfully');
     }
 
     public function show($id)
@@ -136,88 +161,118 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
         $brands = Brand::all();
         $categories = Category::all();
-        $colorProduct = $product->colorProducts()->pluck('color_id')->toArray();
-        // return $colorProduct;
-        $colors = Color::whereNotIn('id', $colorProduct)->get();
+
+        // Fetch colors associated with the product
+        $productColors = $product->colors;
+        // return $productColors;
+        // Fetch colors not associated with the product
+        $colors = Color::whereNotIn('id', $productColors->pluck('id'))->get();
+
         // return $colors;
-        return view('admin.products.edit', ['product' => $product, 'brands' => $brands, 'categories' => $categories, 'colors' => $colors]);
+
+        return view('admin.products.edit', [
+            'product' => $product,
+            'brands' => $brands,
+            'categories' => $categories,
+            'productColors' => $productColors,
+            'colors' => $colors,
+        ]);
     }
+
     public function update(ProductFormRequest $request, $id)
     {
-        // dd($request->all()); 
-
-        //     dd($id);
+        // dd($request->all());
+        // Validate the request
         $validatedData = $request->validated();
+        // Find the category
         $category = Category::findOrFail($validatedData['category_id']);
-        // dd($category);
-
-        $product = $category->products()->where('id', $id)->first();
-        // dd($product?);
+        // Find the product within the category
+        $product = Product::find($id);
         if ($product) {
+            // Update the product data
             $product->update([
-                'category_id'       =>   $validatedData['category_id'], // Fixed typo: 'categroy_id' to 'category_id'
-                'name'              =>   $validatedData['name'],
-                'slug'              =>   Str::slug($validatedData['slug']),
-                'brand'             =>   $validatedData['brand'],
-                'small_description' =>   $validatedData['small_description'],
-                'description'       =>   $validatedData['description'],
-                'meta_title'        =>   $validatedData['meta_title'],
-                'meta_keyword'      =>   $validatedData['meta_keyword'],
-                'meta_description'  =>   $validatedData['meta_description'],
-                'original_price'    =>   $validatedData['original_price'],
-                'selling_price'     =>   $validatedData['selling_price'],
-                'quantity'          =>   $validatedData['quantity'],
-                'trending'          =>   $request->trending == true ? '1' : '0',
-                'status'            =>   $request->status == true ? '1' : '0',
+                'category_id'       => $validatedData['category_id'],
+                'name'              => $validatedData['name'],
+                'slug'              => Str::slug($validatedData['slug']),
+                'brand'             => $validatedData['brand'],
+                'small_description' => $validatedData['small_description'],
+                'description'       => $validatedData['description'],
+                'meta_title'        => $validatedData['meta_title'],
+                'meta_keyword'      => $validatedData['meta_keyword'],
+                'meta_description'  => $validatedData['meta_description'],
+                'original_price'    => $validatedData['original_price'],
+                'selling_price'     => $validatedData['selling_price'],
+                'quantity'          => $validatedData['quantity'],
+                'trending'          => $request->boolean('trending') ? 1 : 0,
+                'status'            => $request->boolean('status') ? 1 : 0,
             ]);
 
-            // dd($product); // This will show the updated product
-        }
-        if ($request->hasFile('image')) {
-            $i = 1;
-            foreach ($request->file('image') as $image) {
-                $extension = $image->getClientOriginalExtension();
-                $image_name = time() . $i++ . '.' . $extension;
-                $image->move('uploads/products/', $image_name);
-                $final_image = 'uploads/products/' . $image_name;
+            // Upload and attach product images
+            if ($request->hasFile('image')) {
+                foreach ($request->file('image') as $key => $image) {
+                    $extension = $image->getClientOriginalExtension();
+                    $image_name = time() . $key . '.' . $extension;
+                    $image->move('uploads/products/', $image_name);
+                    $final_image = 'uploads/products/' . $image_name;
 
-                $product->productImages()->create([
-                    'product_id' => $product->id,
-                    'image'      => $final_image,
-                ]);
+                    $product->productImages()->create([
+                        'product_id' => $product->id,
+                        'image'      => $final_image,
+                    ]);
+                }
             }
+
+            // Attach colors to the product
+            // if ($request->color) {
+            //     foreach ($request->color as $key => $colorId) {
+            //         $color_id = intval($colorId);
+            //         $qty = intval($colorId - 1);
+            //         // dd($color_id);
+            //         // dd($qty);
+            //         $product->colors()->updateExistingPivot($color_id, [
+            //             'product_id' => $product->id,
+            //             'color_quantity' => $request->color_quantity[$qty],
+            //         ]);
+            //     }
+            // }
+            if ($request->color) {
+                foreach ($request->color as $key => $colorId) {
+                    $color_id = intval($colorId);
+                    dd($color_id);
+                    // Update the color_quantity for the specific color in the pivot table
+                    $product->colors()->updateExistingPivot($color_id, [
+                        'color_quantity' => $request->color_quantity[$key],
+                    ]);
+                }
+            }
+            return redirect()->back()->with('success', 'Product with Images updated successfully');
         }
 
-        if ($request->color) {
-            foreach ($request->color as $key => $color) {
-                // dd($color);
-                $product->colorProducts()->create([
-                    'product_id'    => $product->id,
-                    'color_id'      => $color,
-                    'color_quantity'    => $request->color_quantity[$key],
-                ]);
-            }
-        }
-        return redirect()->back()->with('success', 'Product with Images updated successfully');
+        return redirect()->back()->with('error', 'Product not found');
     }
 
     public function update_color_products_quantity(Request $request, $color_product_id)
     {
-        // dd($request->all());
-        $color_product = ColorProduct::findOrFail($color_product_id);
-        if ($color_product) {
-            $color_product->update([
+        $colorProduct = ColorProduct::findOrFail($color_product_id);
+    
+        if ($colorProduct) {
+            // Update the color_quantity for the specific product and color in the pivot table
+            $colorProduct->updateExistingPivot($colorProduct->color_id, [
                 'color_quantity' => $request->quantity,
             ]);
+    
             return response()->json(['message' => 'Quantity Updated successfully']);
         }
+    
         return response()->json(['error' => 'Quantity did not Updated successfully']);
     }
+    
+
 
     public function delete_color_products_quantity($color_product_id)
     {
         $color_product = ColorProduct::findOrFail($color_product_id);
-        if($color_product){
+        if ($color_product) {
             $color_product->delete();
             return response()->json(['message' => 'Quantity Deleted successfully']);
         }

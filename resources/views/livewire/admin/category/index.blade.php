@@ -54,7 +54,7 @@
                                     <td>
                                         <a href="{{ route('category.edit', $category->id) }}"
                                             class="btn btn-primary btn-sm text-white">Edit</a>
-                                        <button href="#" wire:click="deleteCategory({{ $category->id }})"
+                                        <button wire:click="deleteCategory({{ $category->id }})"
                                             class="btn btn-danger btn-sm text-white" data-bs-toggle="modal"
                                             data-bs-target="#deleteModal">Delete</button>
                                     </td>

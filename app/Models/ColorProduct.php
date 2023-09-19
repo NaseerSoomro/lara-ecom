@@ -15,10 +15,10 @@ class ColorProduct extends Model
         'color_quantity',
     ];
 
-    public function color()
-    {
-        return $this->belongsTo(ColorProduct::class,);
-    }
+    // public function color()
+    // {
+    //     return $this->belongsTo(ColorProduct::class);
+    // }
     // public function colorProducts()
     // {
     //     return $this->belongsToMany(Product::class, 'product_id', 'id');

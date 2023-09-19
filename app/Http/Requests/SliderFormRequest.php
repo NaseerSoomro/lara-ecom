@@ -25,7 +25,7 @@ class SliderFormRequest extends FormRequest
             'title' => ['required', 'string'],
             'description' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg'],
-            'status' => ['nullable', 'boolean'],
+            'status' => ['nullable'],
         ];
     }
 }

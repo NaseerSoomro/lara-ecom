@@ -38,7 +38,7 @@
                             <div class="col-md-12 mb-5">
                                 <label for="image"> Image </label>
                                 <input type="file" name="image" id="image" class="form-control rounded">
-                                <img src="{{ asset('uploads/category/' . $category->image) }}" alt="" width="80px"
+                                <img src="{{ asset($category->image) }}" alt="" width="80px"
                                     height="80px" class="mt-3">
                             </div>
                             <div class="col-md-6 mb-3">

@@ -234,13 +234,13 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @forelse ($product->colorProducts as $colorProduct)
+                                                @forelse ($product->colors as $colorProduct)
                                                     <tr class="color-product-id">
-                                                        <td> {{ $colorProduct->color->name }} </td>
+                                                        <td> {{ $colorProduct->pivot->id }} </td>
                                                         <td>
                                                             <input type="text"
                                                                 class="colorProductQuantity input-group mb-3"
-                                                                value="{{ $colorProduct->color_quantity }}">
+                                                                value="{{ $colorProduct->pivot->color_quantity }}">
                                                             <button type="button"
                                                                 class="colorProductUpdateBtn btn btn-sm btn-primary"
                                                                 value="{{ $colorProduct->id }}">Update</button>
@@ -253,7 +253,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="3">No Color Available</td>
+                                                        <td colspan="4">No Color Available</td>
                                                     </tr>
                                                 @endforelse
                                             </tbody>
@@ -290,10 +290,6 @@
                 var colorProductId = $(this).val();
                 var productId = "{{ $product->id }}";
                 var quantity = $(this).closest('.color-product-id').find('.colorProductQuantity').val();
-                // var quantity  = $('#colorProductQuantity').val();
-                // console.log("Quantity:", quantity);
-                // alert(colorProductId);
-                // alert(productId);
 
                 if (quantity < 0 || quantity == null || quantity == '') {
                     alert('Quantity must be a positive value.');
@@ -348,36 +344,11 @@
                     success: function(response) {
                         $(this).remove();
                         alert('Image Remove Successfully');
+
                     }
                 });
             });
 
         });
     </script>
-
-
-    {{-- <script>
-        $(document).ready(function() {
-            $('.deleteRecord').click(function() {
-                let imageId = $(this).data('id');
-                $.ajax({
-                    // route: 'products.delete_image',
-                    url: 'admin/products/product-image/'+imageId+'/delete',
-                    // url: route('products.image.delete', { id: imageId }),
-                    type: 'DELETE',
-                    dataType: 'json',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        alert(response.message);
-                        // You can update the UI or refresh the image list here
-                    },
-                    error: function(xhr, status, error) {
-                        console.error(error);
-                    }
-                });
-            });
-        });
-    </script> --}}
 @endsection

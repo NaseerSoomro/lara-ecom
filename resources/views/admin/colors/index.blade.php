@@ -21,7 +21,7 @@
                                 <th>ID </th>
                                 <th>Name</th>
                                 <th>Color Code</th>
-                                <th>Product</th>
+                                {{-- <th>Product</th> --}}
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -32,11 +32,6 @@
                                     <td>{{ $color->id }}</td>
                                     <td>{{ $color->name }}</td>
                                     <td>{{ $color->color_code }}</td>
-                                    {{-- @if ($color->products)
-                                        <td>{{ $color->products->name }}</td>
-                                    @else --}}
-                                        <td>--</td>
-                                    {{-- @endif --}}
                                     <td>
                                         @if ($color->status === 1)
                                             <input type="checkbox" name="status" id="status"
@@ -56,13 +51,13 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="7">No Record Found</td>
+                                    <td colspan="5">No Color Found</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                     <div>
-                        {{ $colors->links() }}
+                        {{-- {{ $colors->links() }} --}}
                     </div>
                 </div>
             </div>

@@ -7,6 +7,15 @@
                 <div class="card-header">
                     <a href="{{ route('colors.index') }}" class="btn btn-primary text-white float-right"> Back </a>
                 </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 @if (session()->has('success'))
                     <h3 class="alert alert-success"> {{ session('success') }} </h3>
                 @elseif (session()->has('error'))

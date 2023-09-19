@@ -1,5 +1,7 @@
 @extends('layouts.admin')
 
+@section('title', 'Dashboard')
+
 @section('content')
     <div class="row">
         <div class="col-md-12 grid-margin">
@@ -27,7 +29,7 @@
                     <button type="button" class="btn btn-light bg-white btn-icon me-3 mt-2 mt-xl-0">
                         <i class="mdi mdi-plus text-muted"></i>
                     </button>
-                    <button class="btn btn-primary mt-2 mt-xl-0">Generate report</button>
+                    <a href="{{ url('/') }}" class="btn btn-primary mt-2 mt-xl-0 text-white">Homepage</a>
                 </div>
             </div>
         </div>
