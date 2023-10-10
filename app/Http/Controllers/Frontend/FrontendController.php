@@ -29,23 +29,29 @@ class FrontendController extends Controller
         return view('Frontend.category.index', compact('categories'));
     }
 
-    public function category_products($slug)
+    public function category_products($category_slug)
     {
-        $category_products = Category::where('slug', $slug)->first();
-        // dd($category_products);
-        if ($category_products){
-            // foreach ($category_products as $key => $c_p) {
-                # code...
-                $products = $category_products->products()->get();
-                // $products = Product::where('slug', $c_p->slug)->get();
-                // dd($products);
-                // foreach ($products as $key => $p) {
-                //     // $productImages = ProductImage::where('product_id', $p->id)->get();
-                //     $productImages = $p->productImages()->get();
-                // }
-                // dd($productImages);
-            // }
-            return view('frontend.products.index', compact('products', 'category_products'));
+        $category = Category::where('slug', $category_slug)->first();
+        if ($category) {
+            // $products = $category->products()->get();
+            return view('frontend.products.index', compact('category'));
+        }
+        return redirect()->back()->with('error', 'Category Does not Exists');
+    }
+
+    public function category_product_view($category_slug, $product_slug)
+    {
+        $category = Category::where('slug', $category_slug)->first();
+        // dd($category);
+        if ($category) {
+            $product = $category->products()->where('slug', $product_slug)->where('status', '1')->first();
+            // dd($product);
+            if ($product) {
+                $product_images = $product->productImages()->get();
+                // dd($product_images);
+                return view('frontend.products.view', compact('category', 'product', 'product_images'));
+            }
+            return redirect()->back()->with('error', 'Products Does not Exists');
         }
         return redirect()->back()->with('error', 'Category Does not Exists');
     }

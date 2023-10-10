@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('title')
-    {{ $category_products->meta_title }}
+    {{ $category->meta_title }}
 @endsection
 @section('meta keyword')
-    {{ $category_products->meta_keyword }}
+    {{ $category->meta_keyword }}
 @endsection
 @section('meta description')
-    {{ $category_products->meta_description }}
+    {{ $category->meta_description }}
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
                 <div class="col-md-12">
                     <h4 class="mb-4">Our Products</h4>
                 </div>
-                <livewire: frontend.products.index $products="$products" $category_products="$category_products"/>
+                <livewire:frontend.products.index :category="$category" />
             </div>
         </div>
     </div>

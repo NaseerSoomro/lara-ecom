@@ -222,25 +222,11 @@ class ProductController extends Controller
                 }
             }
 
-            // Attach colors to the product
-            // if ($request->color) {
-            //     foreach ($request->color as $key => $colorId) {
-            //         $color_id = intval($colorId);
-            //         $qty = intval($colorId - 1);
-            //         // dd($color_id);
-            //         // dd($qty);
-            //         $product->colors()->updateExistingPivot($color_id, [
-            //             'product_id' => $product->id,
-            //             'color_quantity' => $request->color_quantity[$qty],
-            //         ]);
-            //     }
-            // }
             if ($request->color) {
                 foreach ($request->color as $key => $colorId) {
                     $color_id = intval($colorId);
-                    dd($color_id);
                     // Update the color_quantity for the specific color in the pivot table
-                    $product->colors()->updateExistingPivot($color_id, [
+                    $product->colors()->attach($color_id, [
                         'color_quantity' => $request->color_quantity[$key],
                     ]);
                 }
@@ -254,19 +240,17 @@ class ProductController extends Controller
     public function update_color_products_quantity(Request $request, $color_product_id)
     {
         $colorProduct = ColorProduct::findOrFail($color_product_id);
-    
         if ($colorProduct) {
             // Update the color_quantity for the specific product and color in the pivot table
-            $colorProduct->updateExistingPivot($colorProduct->color_id, [
+            $colorProduct->update([
                 'color_quantity' => $request->quantity,
             ]);
-    
+
             return response()->json(['message' => 'Quantity Updated successfully']);
         }
-    
+
         return response()->json(['error' => 'Quantity did not Updated successfully']);
     }
-    
 
 
     public function delete_color_products_quantity($color_product_id)

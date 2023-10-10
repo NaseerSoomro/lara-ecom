@@ -174,7 +174,8 @@
                                     <label for="status"> Status </label>
                                     {{-- @if ($product->status === 1) --}}
                                     <input type="checkbox" name="status" id="status"
-                                        value="{{ $product->status == 1 ? '1' : '0' }}" {{ $product->status == 1 ? 'checked' : '' }}>
+                                        value="{{ $product->status == 1 ? '1' : '0' }}"
+                                        {{ $product->status == 1 ? 'checked' : '' }}>
                                     {{-- @else
                                         <input type="checkbox" name="status" id="status" value="1">
                                     @endif --}}
@@ -243,12 +244,12 @@
                                                                 value="{{ $colorProduct->pivot->color_quantity }}">
                                                             <button type="button"
                                                                 class="colorProductUpdateBtn btn btn-sm btn-primary"
-                                                                value="{{ $colorProduct->id }}">Update</button>
+                                                                value="{{ $colorProduct->pivot->id }}">Update</button>
                                                         </td>
                                                         <td>
                                                             <button type="button"
                                                                 class="colorProductDeleteBtn btn btn-sm btn-danger"
-                                                                value="{{ $colorProduct->id }}">Delete</button>
+                                                                value="{{ $colorProduct->pivot->id }}">Delete</button>
                                                         </td>
                                                     </tr>
                                                 @empty
@@ -286,6 +287,7 @@
                 }
             });
 
+            // Remove Update Product Quantity
             $(document).on('click', '.colorProductUpdateBtn', function() {
                 var colorProductId = $(this).val();
                 var productId = "{{ $product->id }}";
@@ -310,10 +312,15 @@
                     // dataType: "json",
                     success: function(response) {
                         alert(response.message);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText); // Log the server response
+                        alert('An error occurred. Check the console for details.');
                     }
                 });
             });
 
+            // Remove Color Product Quantity
             $(document).on('click', '.colorProductDeleteBtn', function() {
                 var colorProductId = $(this).val();
                 alert(colorProductId);
@@ -330,6 +337,7 @@
                     }
                 });
             });
+            // Remove Product Image
             $(document).on('click', '.deleteRecord', function() {
                 // $('.removeImage').remove();
                 var productImageId = $(this).val();

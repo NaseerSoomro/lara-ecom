@@ -9,14 +9,20 @@ use App\Http\Controllers\Admin\BrandController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ColorController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Frontend\CartController;
 use App\Http\Controllers\Frontend\FrontendController;
+use App\Http\Controllers\Frontend\WishlistController;
 
 
 Auth::routes();
 
 Route::get('/', [FrontendController::class, 'index']);
 Route::get('/collections', [FrontendController::class, 'categories']);
-Route::get('/collections/{slug}', [FrontendController::class, 'category_products']);
+Route::get('/collections/{category_slug}', [FrontendController::class, 'category_products'])->name('category_products');
+Route::get('/collections/{cateory_slug}/{product_slug}', [FrontendController::class, 'category_product_view'])->name('category_product_view');
+
+Route::get('wishlists', [WishlistController::class, 'index'])->name('wishlists');
+Route::get('carts', [CartController::class, 'index'])->name('carts');
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -44,8 +50,8 @@ Route::prefix('admin/')->middleware(['auth', 'is_admin'])->group(function(){
         Route::get('products/delete-product-image/{id}', 'destroy_image')->name('products.image.delete');  
         
         // 
-        Route::post('products/update-color-products/{color_product_id}', 'update_color_products_quantity');  
-        Route::get('products/delete-color-products/{color_product_id}', 'delete_color_products_quantity');  
+        Route::post('products/update-color-products/{color_product_id}', 'update_color_products_quantity')->name('update_color_products_quantity');  
+        Route::get('products/delete-color-products/{color_product_id}', 'delete_color_products_quantity')->name('delete_color_products_quantity');  
     });
 
      // Color Routes
