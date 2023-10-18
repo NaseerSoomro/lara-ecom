@@ -55,4 +55,12 @@ class FrontendController extends Controller
         }
         return redirect()->back()->with('error', 'Category Does not Exists');
     }
+
+    public function thank_you()
+    {
+        return view('frontend.thank_you');
+    }
+
 }
+
+

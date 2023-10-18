@@ -13,9 +13,6 @@
                                 <div class="col-md-2">
                                     <h4>Price</h4>
                                 </div>
-                                {{-- <div class="col-md-2">
-                                    <h4>Quantity</h4>
-                                </div> --}}
                                 <div class="col-md-2">
                                     <h4>Remove</h4>
                                 </div>

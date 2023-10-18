@@ -17,4 +17,19 @@ class Cart extends Model
         'color_product_id',
         'quantity'
     ];
+
+    /**
+     * Get the user that owns the Cart
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id', 'id');
+    }
+    
+    public function color_products()
+    {
+        return $this->belongsTo(ColorProduct::class, 'color_product_id', 'id');
+    }
 }
