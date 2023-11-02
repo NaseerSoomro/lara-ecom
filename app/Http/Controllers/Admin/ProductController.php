@@ -95,6 +95,7 @@ class ProductController extends Controller
             'selling_price'     =>   $validatedData['selling_price'],
             'quantity'          =>   $validatedData['quantity'],
             'trending'          =>   $request->trending == true ? '1' : '0',
+            'featured'          =>   $request->featured == true ? '1' : '0',
             'status'            =>   $request->status == true ? '1' : '0',
         ]);
 
@@ -181,8 +182,7 @@ class ProductController extends Controller
 
     public function update(ProductFormRequest $request, $id)
     {
-        // dd($request->all());
-        // Validate the request
+
         $validatedData = $request->validated();
         // Find the category
         $category = Category::findOrFail($validatedData['category_id']);
@@ -204,6 +204,7 @@ class ProductController extends Controller
                 'selling_price'     => $validatedData['selling_price'],
                 'quantity'          => $validatedData['quantity'],
                 'trending'          => $request->boolean('trending') ? 1 : 0,
+                'featured'          => $request->boolean('featured') ? 1 : 0,
                 'status'            => $request->boolean('status') ? 1 : 0,
             ]);
 

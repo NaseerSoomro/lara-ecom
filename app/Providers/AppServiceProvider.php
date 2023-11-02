@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\Setting;
 use App\Models\Wishlist;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\ServiceProvider;
@@ -33,5 +34,7 @@ class AppServiceProvider extends ServiceProvider
         //     }
         // });
         Paginator::useBootstrap();
+        $appSetting = Setting::first();
+        view()->share('appSetting', $appSetting);
     }
 }

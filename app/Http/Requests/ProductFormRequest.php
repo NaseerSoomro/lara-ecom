@@ -31,7 +31,8 @@ class ProductFormRequest extends FormRequest
             'original_price'    => 'required|integer',
             'selling_price'     => 'required|integer',
             'quantity'          => 'nullable|integer', // Specify that quantity should be an integer
-            'trending'          => 'nullable|boolean', // Use boolean validation rule for true/false values
+            'trending'          => 'nullable', // Use boolean validation rule for true/false values
+            'featured'          => 'nullable', // Use boolean validation rule for true/false values
             'status'            => 'nullable|boolean', // Use boolean validation rule for true/false values
             'meta_title'        => 'required|string',
             'meta_keyword'      => 'required|string',

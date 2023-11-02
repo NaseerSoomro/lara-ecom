@@ -167,7 +167,17 @@
                                             value="{{ $product->trending }}"
                                             {{ $product->trending == 1 ? 'checked' : '' }}>
                                     @else
-                                        <input type="checkbox" name="status" id="status">
+                                        <input type="checkbox" name="trending" id="status">
+                                    @endif
+                                </div>
+                                <div class="mb-3">
+                                    <label for="featured"> Featured </label>
+                                    @if ($product->featured === 1)
+                                        <input type="checkbox" name="featured" id="featured"
+                                            value="{{ $product->featured }}"
+                                            {{ $product->featured == 1 ? 'checked' : '' }}>
+                                    @else
+                                        <input type="checkbox" name="featured" id="featured">
                                     @endif
                                 </div>
                                 <div class="mb-3">
@@ -196,8 +206,8 @@
                                             @foreach ($product->productImages as $images)
                                                 <div class="col-md-2 image-container">
                                                     <div class="removeImage">
-                                                        <img src="{{ asset($images->image) }}"alt="Image"
-                                                            width="100" height="100" class="me-4 border">
+                                                        <img src="{{ asset($images->image) }}"alt="Image" width="100"
+                                                            height="100" class="me-4 border">
                                                         <button type="button" class="deleteRecord"
                                                             data-id="{{ $images->id }}"
                                                             value="{{ $images->id }}">Remove</button>

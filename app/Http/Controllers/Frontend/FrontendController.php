@@ -18,15 +18,29 @@ class FrontendController extends Controller
     public function index()
     {
         $sliders = Slider::where('status', '1')->get();
-        // dd($sliders);
-        return view('Frontend.index', compact('sliders'));
+        $trendingProducts = Product::where('trending', '1')->latest()->take(10)->get();
+        return view('Frontend.index', compact('sliders', 'trendingProducts'));
     }
 
     public function categories()
     {
         $categories = Category::where('status', '1')->get();
-        // dd($sliders);
         return view('Frontend.category.index', compact('categories'));
+    }
+
+    public function new_arrivals()
+    {
+        $newArrivals = Product::where('status', '1')->latest()->take(5)->get();
+        // dd($newArrivals);
+        return view('frontend.pages.new_arrivals', compact('newArrivals'));
+    }
+
+    function featured_products() 
+    {
+        $featuredProducts = Product::where('featured', '1')->get();
+        // $featuredProducts = Product::where('featured', '1')->latest()->take(5)->get();
+        // dd($featuredProducts);
+        return view('frontend.pages.featured_products', ['featuredProducts' => $featuredProducts]);
     }
 
     public function category_products($category_slug)

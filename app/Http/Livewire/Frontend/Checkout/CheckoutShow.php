@@ -14,6 +14,46 @@ class CheckoutShow extends Component
     public $fullName, $phone, $email, $pinCode, $address;
     public $paymentMode, $paymentId;
 
+    public $listener = [
+        'inputValidation', 'transactionIdEmit' => 'onlineOrder',
+    ];
+
+    function inputValidation()
+    {
+        $this->validate();
+    }
+
+
+    function onlineOrder($paymentId)
+    {
+        $this->paymentId = $paymentId;
+        $this->paymentMode = 'Paid with Paypal';
+        $order = Order::create([
+            'user_id' => auth()->user()->id,
+            'tracking_no' => 'Ecom' . Str::random('10'),
+            'full_name' => $this->fullName,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'pin_code' => $this->pinCode,
+            'address' => $this->address,
+            'status_message' => 'In Process',
+            'payment_mode' => $this->paymentMode,
+            'payment_id' => $this->paymentId,
+        ]);
+
+        // dd($this->cartItems);
+
+        foreach ($this->cartItems as $cartItem) {
+            OrderItem::create([
+                'order_id' => $order->id,
+                'product_id' => $cartItem->product_id,
+                'color_product_id' => $cartItem->color_product_id,
+                'quantity' => $cartItem->quantity,
+                'price' => $cartItem->product->selling_price * $cartItem->quantity,
+            ]);
+        }
+    }
+
     public function rules()
     {
         return [
@@ -53,11 +93,9 @@ class CheckoutShow extends Component
             ]);
         }
 
-        if($cartItem->color_product_id)
-        {
+        if ($cartItem->color_product_id) {
             $cartItem->color_products()->where('id', $cartItem->color_product_id)->decrement('color_quantity', $cartItem->quantity);
-        }
-        else{            
+        } else {
             $cartItem->product()->where('id', $cartItem->product_id)->decrement('quantity', $cartItem->quantity);
         }
 

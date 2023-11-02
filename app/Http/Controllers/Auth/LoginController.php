@@ -36,7 +36,7 @@ class LoginController extends Controller
         if (Auth::user()->role == 'admin') {
             return redirect('admin/dashboard')->with('message', 'Welcome to Dashboard');
         }
-        return redirect('/home')->with('message', 'Access Denied');
+        return redirect('/')->with('message', 'Access Denied');
     }
 
     /**

@@ -23,4 +23,9 @@ class Order extends Model
         'payment_mode',
         'payment_id'
     ];
+
+    public function order_items()
+    {
+        return $this->hasMany(OrderItem::class, 'order_id', 'id');
+    }
 }

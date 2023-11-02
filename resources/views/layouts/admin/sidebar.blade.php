@@ -2,7 +2,7 @@
     <ul class="nav">
         <li class="nav-item">
             <a class="nav-link" href="{{ url('admin/dashboard') }}">
-                <i class="mdi mdi-home menu-icon"></i>
+                <i class="mdi mdi-cog"></i>
                 <span class="menu-title">Dashboard</span>
             </a>
         </li>
@@ -17,8 +17,8 @@
                 <ul class="nav flex-column sub-menu">
                     <li class="nav-item"> <a class="nav-link" href="{{ route('category.create') }}">Add Category</a>
                     </li>
-                    <li class="nav-item"> <a class="nav-link"
-                            href="{{ route('category.index') }}">All Categories</a></li>
+                    <li class="nav-item"> <a class="nav-link" href="{{ route('category.index') }}">All Categories</a>
+                    </li>
                 </ul>
             </div>
         </li>
@@ -53,6 +53,18 @@
             <a class="nav-link" href="{{ route('sliders.index') }}">
                 <i class="mdi mdi-view-headline menu-icon"></i>
                 <span class="menu-title">Home Slider</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('orders.index') }}">
+                <i class="mdi mdi-view-headline menu-icon"></i>
+                <span class="menu-title">Orders</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{{ route('webstite_settings.index') }}">
+                <i class="mdi mdi-view-headline menu-icon"></i>
+                <span class="menu-title">Website Setting</span>
             </a>
         </li>
         <li class="nav-item">

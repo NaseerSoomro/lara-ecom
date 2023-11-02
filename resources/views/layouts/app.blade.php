@@ -30,6 +30,8 @@
 
     <link rel="stylesheet" href="{{ asset('assets/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/owl.theme.default.min.css') }}">
 
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 
@@ -43,20 +45,27 @@
         <main>
             @yield('content')
         </main>
+        @include('layouts.frontend.footer')
     </div>
 
     <script src="{{ asset('assets/js/jquery-3.7.0.min.js') }}"></script>
     <script src="{{ asset('assets/js/bootstrap.bundle.min.js') }}"></script>
 
+
     <!-- JavaScript -->
     <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
     <script>
         window.addEventListener('message', event => {
-            alertify.set('notifier', 'position', 'top-right');
-            alertify.notify(event.detail.text, event.detail.type);
+            if (event.detail) {
+                alertify.set('notifier', 'position', 'top-right');
+                alertify.notify(event.detail.text, event.detail.type);
+            }
         })
     </script>
+    <script src="{{ asset('assets/js/owl.carousel.min.js') }}"></script>
+    @yield('script')
     @livewireScripts
+    @stack('scripts')
 </body>
 
 </html>

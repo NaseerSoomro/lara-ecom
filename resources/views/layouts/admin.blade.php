@@ -37,20 +37,17 @@
 
     <div class="container-scroller">
         {{-- Admin Navbar --}}
-        @include('layouts.admin.navbar') 
+        @include('layouts.admin.navbar')
         <div class="container-fluid page-body-wrapper">
             {{-- Admin Sidebar --}}
             @include('layouts.admin.sidebar')
             <div class="main-panel">
                 <div class="content-wrapper">
-
                     @yield('content')
-
                 </div>
             </div>
         </div>
     </div>
-
 
     <!-- plugins:js -->
     <script src="{{ asset('assets/admin/vendors/base/vendor.bundle.base.js') }}"></script>

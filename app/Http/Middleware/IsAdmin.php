@@ -18,7 +18,7 @@ class IsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if(Auth::user()->role == 'user'){
-            return redirect('/home')->with('status', 'Access Denied');
+            return redirect('/')->with('status', 'Access Denied');
         }
         return $next($request);
     }

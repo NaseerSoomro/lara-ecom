@@ -154,13 +154,25 @@
                                             {{ $message }}
                                         @enderror </span>
                                 </div>
-                                <div class="mb-3">
-                                    <label for="trending"> Trending </label>
-                                    <input type="checkbox" name="trending" id="status" value="1">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="status"> Status </label>
-                                    <input type="checkbox" name="status" id="status" value="1">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="trending"> Trending </label>
+                                            <input type="checkbox" name="trending" id="status" value="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="featured"> Featured </label>
+                                            <input type="checkbox" name="featured" id="status" value="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="status"> Status </label>
+                                            <input type="checkbox" name="status" id="status" value="1">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="image" role="tabpanel" aria-labelledby="image-tab">
